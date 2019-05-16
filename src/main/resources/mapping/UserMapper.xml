@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzu.paper.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.hzu.paper.entity.User">
+    <constructor>
+      <idArg column="YHID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="User_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    YHID, User_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from 用户表
+    where YHID = #{yhid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from 用户表
+    where YHID = #{yhid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hzu.paper.entity.User">
+    insert into 用户表 (YHID, User_name)
+    values (#{yhid,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hzu.paper.entity.User">
+    insert into 用户表
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yhid != null">
+        YHID,
+      </if>
+      <if test="userName != null">
+        User_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yhid != null">
+        #{yhid,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hzu.paper.entity.User">
+    update 用户表
+    <set>
+      <if test="userName != null">
+        User_name = #{userName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where YHID = #{yhid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hzu.paper.entity.User">
+    update 用户表
+    set User_name = #{userName,jdbcType=VARCHAR}
+    where YHID = #{yhid,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findUserById" parameterType="string" resultType="int">
+    select count(1)
+    from 用户表
+    where YHID = #{uesrId,jdbcType=VARCHAR}
+  </select>
+</mapper>

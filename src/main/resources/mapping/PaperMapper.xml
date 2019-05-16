@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzu.paper.dao.PaperMapper">
+  <resultMap id="BaseResultMap" type="com.hzu.paper.entity.Paper">
+    <constructor>
+      <idArg column="LWID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="LW_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_author" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="File" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="isCollect" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_time" javaType="java.util.Date" jdbcType="DATE" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hzu.paper.entity.Paper">
+    <constructor>
+      <idArg column="LWID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="LW_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_author" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="File" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="isCollect" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_time" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="LW_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    LWID, LW_date, LW_title, LW_author, File, isCollect, created_time
+  </sql>
+  <sql id="Blob_Column_List">
+    LW_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from 论文表
+    where LWID = #{lwid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from 论文表
+    where LWID = #{lwid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hzu.paper.entity.Paper">
+    insert into 论文表 (LWID, LW_date, LW_title, 
+      LW_author, File, isCollect, 
+      created_time, LW_content)
+    values (#{lwid,jdbcType=VARCHAR}, #{lwDate,jdbcType=DATE}, #{lwTitle,jdbcType=VARCHAR}, 
+      #{lwAuthor,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{iscollect,jdbcType=INTEGER}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{lwContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hzu.paper.entity.Paper">
+    insert into 论文表
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lwid != null">
+        LWID,
+      </if>
+      <if test="lwDate != null">
+        LW_date,
+      </if>
+      <if test="lwTitle != null">
+        LW_title,
+      </if>
+      <if test="lwAuthor != null">
+        LW_author,
+      </if>
+      <if test="file != null">
+        File,
+      </if>
+      <if test="iscollect != null">
+        isCollect,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="lwContent != null">
+        LW_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lwid != null">
+        #{lwid,jdbcType=VARCHAR},
+      </if>
+      <if test="lwDate != null">
+        #{lwDate,jdbcType=DATE},
+      </if>
+      <if test="lwTitle != null">
+        #{lwTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="lwAuthor != null">
+        #{lwAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="file != null">
+        #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="iscollect != null">
+        #{iscollect,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lwContent != null">
+        #{lwContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hzu.paper.entity.Paper">
+    update 论文表
+    <set>
+      <if test="lwDate != null">
+        LW_date = #{lwDate,jdbcType=DATE},
+      </if>
+      <if test="lwTitle != null">
+        LW_title = #{lwTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="lwAuthor != null">
+        LW_author = #{lwAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="file != null">
+        File = #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="iscollect != null">
+        isCollect = #{iscollect,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lwContent != null">
+        LW_content = #{lwContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where LWID = #{lwid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hzu.paper.entity.Paper">
+    update 论文表
+    set LW_date = #{lwDate,jdbcType=DATE},
+      LW_title = #{lwTitle,jdbcType=VARCHAR},
+      LW_author = #{lwAuthor,jdbcType=VARCHAR},
+      File = #{file,jdbcType=VARCHAR},
+      isCollect = #{iscollect,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      LW_content = #{lwContent,jdbcType=LONGVARCHAR}
+    where LWID = #{lwid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hzu.paper.entity.Paper">
+    update 论文表
+    set LW_date = #{lwDate,jdbcType=DATE},
+      LW_title = #{lwTitle,jdbcType=VARCHAR},
+      LW_author = #{lwAuthor,jdbcType=VARCHAR},
+      File = #{file,jdbcType=VARCHAR},
+      isCollect = #{iscollect,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where LWID = #{lwid,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findPaper" parameterType="map" resultMap="ResultMapWithBLOBs" >
+    select *
+    from 论文表
+    where LW_title LIKE CONCAT(CONCAT('%', #{keyWord}), '%')
+    ORDER BY created_time DESC
+  </select>
+
+  <select id="findPaperFile" parameterType="string" resultType="string">
+    select File
+    from 论文表
+    where LWID = #{lwId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="hasPaper" parameterType="string" resultType="java.lang.Integer">
+    select count(1)
+    from 论文表
+    where LW_title LIKE CONCAT(CONCAT('%', #{keyWord}), '%')
+  </select>
+</mapper>

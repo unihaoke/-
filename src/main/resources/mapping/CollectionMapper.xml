@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzu.paper.dao.CollectionMapper">
+  <resultMap id="BaseResultMap" type="com.hzu.paper.entity.CollectionHistory">
+    <constructor>
+      <idArg column="YHID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="LWID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="created_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="LW_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_author" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hzu.paper.entity.CollectionHistory">
+    <constructor>
+      <idArg column="YHID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <idArg column="LWID" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="created_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="LW_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_author" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="LW_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    YHID, LWID, created_time, LW_title, LW_author
+  </sql>
+  <sql id="Blob_Column_List">
+    LW_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.hzu.paper.entity.CollectionKey" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from 收藏信息表
+    where YHID = #{yhid,jdbcType=VARCHAR}
+      and LWID = #{lwid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.hzu.paper.entity.CollectionKey">
+    delete from 收藏信息表
+    where YHID = #{yhid,jdbcType=VARCHAR}
+      and LWID = #{lwid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hzu.paper.entity.CollectionHistory">
+    insert into 收藏信息表 (YHID, LWID, created_time, 
+      LW_title, LW_author, LW_content
+      )
+    values (#{yhid,jdbcType=VARCHAR}, #{lwid,jdbcType=VARCHAR}, now(),
+      #{lwTitle,jdbcType=VARCHAR}, #{lwAuthor,jdbcType=VARCHAR}, #{lwContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hzu.paper.entity.CollectionHistory">
+    insert into 收藏信息表
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yhid != null">
+        YHID,
+      </if>
+      <if test="lwid != null">
+        LWID,
+      </if>
+        created_time,
+      <if test="lwTitle != null">
+        LW_title,
+      </if>
+      <if test="lwAuthor != null">
+        LW_author,
+      </if>
+      <if test="lwContent != null">
+        LW_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yhid != null">
+        #{yhid,jdbcType=VARCHAR},
+      </if>
+      <if test="lwid != null">
+        #{lwid,jdbcType=VARCHAR},
+      </if>
+      now(),
+      <if test="lwTitle != null">
+        #{lwTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="lwAuthor != null">
+        #{lwAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="lwContent != null">
+        #{lwContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hzu.paper.entity.CollectionHistory">
+    update 收藏信息表
+    <set>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lwTitle != null">
+        LW_title = #{lwTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="lwAuthor != null">
+        LW_author = #{lwAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="lwContent != null">
+        LW_content = #{lwContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where YHID = #{yhid,jdbcType=VARCHAR}
+      and LWID = #{lwid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hzu.paper.entity.CollectionHistory">
+    update 收藏信息表
+    set created_time = now(),
+      LW_title = #{lwTitle,jdbcType=VARCHAR},
+      LW_author = #{lwAuthor,jdbcType=VARCHAR},
+      LW_content = #{lwContent,jdbcType=LONGVARCHAR}
+    where YHID = #{yhid,jdbcType=VARCHAR}
+      and LWID = #{lwid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hzu.paper.entity.CollectionHistory">
+    update 收藏信息表
+    set created_time = now(),
+      LW_title = #{lwTitle,jdbcType=VARCHAR},
+      LW_author = #{lwAuthor,jdbcType=VARCHAR}
+    where YHID = #{yhid,jdbcType=VARCHAR}
+      and LWID = #{lwid,jdbcType=VARCHAR}
+  </update>
+  <select id="findCollectionByUserId" parameterType="string" resultMap="ResultMapWithBLOBs">
+    select  *
+    from 收藏信息表
+    where YHID = #{userId,jdbcType=VARCHAR}
+    ORDER BY created_time DESC
+  </select>
+</mapper>
